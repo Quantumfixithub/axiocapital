@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Check-in - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;padding-bottom:20px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .streak-card{background:linear-gradient(135deg,#D4AF37,#F4E4A6);border-radius:18px;padding:28px;text-align:center;margin-bottom:20px}
+        .streak-num{font-size:56px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif}
+        .streak-label{font-size:14px;color:#0A1628;opacity:.75;margin-top:4px}
+        .reward-info{font-size:18px;font-weight:700;color:#0A1628;margin-top:12px}
+        .card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .section-title{font-size:18px;font-weight:600;color:#0A1628;margin-bottom:16px;font-family:'Cormorant Garamond',serif}
+        .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+        .day-box{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15)}
+        .day-box.done{background:linear-gradient(135deg,#D4AF37,#F4E4A6);border-color:#D4AF37}
+        .day-box.today{border:2px solid #D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.2)}
+        .day-num{font-size:14px;font-weight:700;color:#0A1628}
+        .day-reward{font-size:10px;color:#666;margin-top:2px}
+        .day-box.done .day-reward{color:#0A1628}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:14px;border-radius:8px;font-size:13px;color:#0A1628;line-height:1.8;margin-bottom:16px}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:16px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+        .btn:disabled{opacity:.5;cursor:not-allowed}
+        .history-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+        .history-row:last-child{border-bottom:none}
+        .hist-amount{color:#4cd964;font-weight:700}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">Daily Check-in</div>
+</div>
+<div class="container">
+    <div class="streak-card">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-label">Day Streak</div>
+        <div class="reward-info">&#8358;100 per check-in</div>
+    </div>
+
+    <div class="card">
+        <div class="section-title">&#128197; This Week</div>
+        <div class="calendar-grid" id="calGrid"></div>
+        <div class="info-box">
+            &#128204; Check in every day to earn &#8358;100<br>
+            &#128204; Streak bonus: keep your streak going for consistent rewards<br>
+            &#128204; Miss a day and your streak resets
+        </div>
+        <button class="btn" id="checkinBtn" onclick="doCheckin()">&#9989; Check In Today (+&#8358;100)</button>
+    </div>
+
+    <div class="card">
+        <div class="section-title">&#127941; Recent Check-ins</div>
+        <div id="historyList"><p style="color:#aaa;font-size:14px;text-align:center;padding:16px">No check-ins yet. Start today!</p></div>
+    </div>
+</div>
+<script>
+const uid=localStorage.getItem('userId')||'user001';
+
+function getHistory(){return JSON.parse(localStorage.getItem('checkinHistory_'+uid)||'[]');}
+function saveHistory(h){localStorage.setItem('checkinHistory_'+uid,JSON.stringify(h));}
+
+function checkedToday(){
+    const hist=getHistory();
+    if(!hist.length)return false;
+    const last=new Date(hist[0].date);
+    const today=new Date();
+    return last.toDateString()===today.toDateString();
+}
+
+function calcStreak(){
+    const hist=getHistory();
+    if(!hist.length)return 0;
+    let streak=0;
+    let d=new Date();
+    for(let i=0;i<hist.length;i++){
+        const hd=new Date(hist[i].date);
+        const diff=Math.round((new Date(d.toDateString())-new Date(hd.toDateString()))/(1000*86400));
+        if(diff===0||(diff===1&&i===0)){streak++;d=hd;}
+        else break;
+    }
+    return streak;
+}
+
+function render(){
+    const hist=getHistory();
+    const streak=calcStreak();
+    const alreadyDone=checkedToday();
+    document.getElementById('streakNum').textContent=streak;
+
+    // Calendar — show 7 days
+    const cal=document.getElementById('calGrid');
+    cal.innerHTML='';
+    for(let i=6;i>=0;i--){
+        const d=new Date();d.setDate(d.getDate()-i);
+        const done=hist.some(h=>new Date(h.date).toDateString()===d.toDateString());
+        const isToday=i===0;
+        const box=document.createElement('div');
+        box.className='day-box'+(done?' done':'')+(isToday?' today':'');
+        box.innerHTML=`<div class="day-num">${d.getDate()}</div><div class="day-reward">${done?'&#10003;':'&#8358;100'}</div>`;
+        cal.appendChild(box);
+    }
+
+    // Button
+    const btn=document.getElementById('checkinBtn');
+    if(alreadyDone){btn.disabled=true;btn.textContent='&#10003; Already Checked In Today';}
+
+    // History
+    const hl=document.getElementById('historyList');
+    if(!hist.length){hl.innerHTML='<p style="color:#aaa;font-size:14px;text-align:center;padding:16px">No check-ins yet. Start today!</p>';return;}
+    hl.innerHTML=hist.slice(0,7).map(h=>`<div class="history-row"><span>&#128197; ${new Date(h.date).toLocaleDateString('en-NG',{weekday:'short',month:'short',day:'numeric'})}</span><span class="hist-amount">+&#8358;100</span></div>`).join('');
+}
+
+function doCheckin(){
+    if(checkedToday()){alert('Already checked in today!');return;}
+    const hist=getHistory();
+    hist.unshift({date:new Date().toISOString(),amount:100});
+    saveHistory(hist);
+    let bal=parseFloat(localStorage.getItem('userBalance')||'0');
+    bal+=100;localStorage.setItem('userBalance',bal.toString());
+    alert('\u2705 Check-in successful!\n+\u20A6100 added to your wallet.\n\nStreak: '+calcStreak()+' day(s)!');
+    render();
+}
+
+render();
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

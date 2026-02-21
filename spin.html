@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Spin - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;padding-bottom:20px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .how-card{background:linear-gradient(135deg,#0A1628,#1a2942);border-radius:16px;padding:22px;color:#fff;margin-bottom:20px}
+        .how-card h3{color:#D4AF37;font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:12px}
+        .how-card p{font-size:13px;color:rgba(255,255,255,.85);line-height:1.9}
+        .locked-card{background:#fff;border-radius:16px;padding:40px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+        .locked-icon{font-size:64px;margin-bottom:16px}
+        .locked-title{font-size:22px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif;margin-bottom:10px}
+        .locked-text{font-size:14px;color:#777;line-height:1.7;margin-bottom:22px}
+        .invite-btn{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);color:#0A1628;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px}
+        .spins-bar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border-radius:12px;padding:16px 22px;margin-bottom:20px}
+        .spins-left h4{font-size:13px;color:#0A1628;opacity:.75;margin-bottom:4px}
+        .spins-num{font-size:40px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif}
+        .spins-right{text-align:right;font-size:13px;color:#0A1628}
+        .spins-right strong{font-size:16px}
+        .ref-list{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .ref-list h4{font-size:16px;font-weight:600;color:#0A1628;margin-bottom:14px}
+        .ref-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+        .ref-item:last-child{border-bottom:none}
+        .ref-name{font-weight:600;color:#0A1628}
+        .ref-deposit{color:#4cd964;font-weight:600}
+        .ref-prize{background:rgba(212,175,55,.1);color:#B8960C;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600}
+        .spin-card{background:#fff;border-radius:16px;padding:25px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+        .wheel-wrap{position:relative;width:280px;height:280px;margin:0 auto 24px}
+        .pointer{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid #e74c3c;z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+        .wheel{width:100%;height:100%;border-radius:50%;border:8px solid #0A1628;transition:transform 4s cubic-bezier(.17,.67,.12,.99);position:relative}
+        .segment{position:absolute;width:50%;height:50%;transform-origin:100% 100%;overflow:hidden}
+        .seg-content{position:absolute;bottom:0;right:0;width:200%;height:200%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0A1628;padding-bottom:30%;padding-right:10%}
+        .wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;background:#0A1628;border-radius:50%;border:4px solid #D4AF37;display:flex;align-items:center;justify-content:center;color:#D4AF37;font-size:22px;z-index:5}
+        .spin-btn{width:100%;padding:16px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:17px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .spin-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+        .spin-btn:disabled{opacity:.5;cursor:not-allowed}
+        .win-history{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .win-history h4{font-size:16px;font-weight:600;color:#0A1628;margin-bottom:14px}
+        .win-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+        .win-item:last-child{border-bottom:none}
+        .win-amount{color:#4cd964;font-weight:700;font-size:15px}
+        .empty{text-align:center;color:#aaa;padding:20px;font-size:14px}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">Lucky Spin</div>
+</div>
+<div class="container">
+    <div class="how-card">
+        <h3>&#127918; How Lucky Spin Works</h3>
+        <p>
+            &#8226; Invite friends using your referral code<br>
+            &#8226; When an invited friend makes a <strong>verified deposit</strong>, you earn 1 spin<br>
+            &#8226; Spin prize = <strong>4% of your friend's deposit amount</strong><br>
+            &#8226; Each depositing referral = one unique spin<br>
+            &#8226; Example: Friend deposits &#8358;7,500 &#10230; Your prize = &#8358;300
+        </p>
+    </div>
+    <div id="mainContent"></div>
+</div>
+<script>
+const uid = localStorage.getItem('userId')||'user001';
+
+function getReferrals(){
+    // Admin populates this when approving deposits from referred users
+    const d=localStorage.getItem('refDeposits_'+uid);
+    return d?JSON.parse(d):[];
+}
+function getSpinsUsed(){
+    return parseInt(localStorage.getItem('spinsUsed_'+uid)||'0');
+}
+function getWins(){
+    const d=localStorage.getItem('spinWins_'+uid);
+    return d?JSON.parse(d):[];
+}
+function saveWin(prize,refName){
+    const wins=getWins();
+    wins.unshift({prize,refName,date:new Date().toLocaleDateString('en-NG')});
+    localStorage.setItem('spinWins_'+uid,JSON.stringify(wins));
+}
+
+let spinning=false;
+let rotation=0;
+
+function render(){
+    const refs=getReferrals();
+    const used=getSpinsUsed();
+    const available=Math.max(0,refs.length-used);
+    const wins=getWins();
+    const el=document.getElementById('mainContent');
+
+    if(refs.length===0){
+        el.innerHTML=`
+        <div class="locked-card">
+            <div class="locked-icon">&#128274;</div>
+            <div class="locked-title">No Spins Available Yet</div>
+            <div class="locked-text">Invite friends and have them make a deposit to unlock your spins.<br>Each depositing referral = 1 spin worth 4% of their deposit.</div>
+            <a href="invitation.html" class="invite-btn">&#127873; Invite Friends</a>
+        </div>`;
+        return;
+    }
+
+    const refHTML=refs.map(r=>`
+    <div class="ref-item">
+        <span class="ref-name">&#128100; ${r.name}</span>
+        <span class="ref-deposit">&#8358;${Number(r.deposit).toLocaleString('en-NG')}</span>
+        <span class="ref-prize">&#8658; &#8358;${Math.round(r.deposit*.04).toLocaleString('en-NG')}</span>
+    </div>`).join('');
+
+    const winsHTML=wins.length===0
+        ?'<div class="empty">No wins yet. Spin to win!</div>'
+        :wins.slice(0,5).map(w=>`
+    <div class="win-item">
+        <span>&#127881; From ${w.refName}</span>
+        <span class="win-amount">+&#8358;${Number(w.prize).toLocaleString('en-NG')}</span>
+        <span style="color:#aaa;font-size:11px">${w.date}</span>
+    </div>`).join('');
+
+    // Build wheel colours
+    const colours=['#D4AF37','#F4E4A6','#D4AF37','#F4E4A6','#D4AF37','#F4E4A6','#D4AF37','#F4E4A6'];
+    const segs=refs.slice(used).map((r,i)=>{
+        const angle=i*(360/Math.max(refs.length-used,1));
+        const prize=Math.round(r.deposit*.04);
+        return `<div class="segment" style="transform:rotate(${angle}deg) skewY(0deg);background:${colours[i%2]}"><div class="seg-content">&#8358;${prize.toLocaleString()}</div></div>`;
+    }).join('');
+
+    el.innerHTML=`
+    <div class="spins-bar">
+        <div class="spins-left"><h4>Available Spins</h4><div class="spins-num" id="spinsNum">${available}</div></div>
+        <div class="spins-right"><strong>${refs.length}</strong> referrals deposited<br><span style="opacity:.7">${used} spins used</span></div>
+    </div>
+    <div class="ref-list"><h4>&#128101; Referrals Who Deposited</h4>${refHTML}</div>
+    <div class="spin-card">
+        <div class="wheel-wrap">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel" style="background:conic-gradient(${refs.slice(used).map((r,i)=>{const pct=100/(refs.length-used);return `${i%2===0?'#D4AF37':'#F4E4A6'} ${i*pct}% ${(i+1)*pct}%`}).join(',')})">
+                <div class="wheel-center">&#127918;</div>
+            </div>
+        </div>
+        <button class="spin-btn" id="spinBtn" onclick="doSpin()" ${available<=0?'disabled':''}>
+            ${available>0?'SPIN NOW ('+available+' left)':'NO SPINS LEFT'}
+        </button>
+    </div>
+    <div class="win-history"><h4>&#127941; Win History</h4>${winsHTML}</div>`;
+}
+
+function doSpin(){
+    if(spinning)return;
+    const refs=getReferrals();
+    const used=getSpinsUsed();
+    if(refs.length-used<=0)return;
+    spinning=true;
+    document.getElementById('spinBtn').disabled=true;
+    const wheel=document.getElementById('wheel');
+    rotation+=1440+Math.floor(Math.random()*360);
+    wheel.style.transform=`rotate(${rotation}deg)`;
+    const chosen=refs[used];
+    const prize=Math.round(chosen.deposit*.04);
+    setTimeout(()=>{
+        spinning=false;
+        const newUsed=used+1;
+        localStorage.setItem('spinsUsed_'+uid,newUsed);
+        saveWin(prize,chosen.name);
+        let bal=parseFloat(localStorage.getItem('userBalance')||'0');
+        bal+=prize;
+        localStorage.setItem('userBalance',bal.toString());
+        alert('&#127881; Congratulations!\n\nYou won \u20A6'+prize.toLocaleString('en-NG')+' from '+chosen.name+"'s deposit!\n\nCredited to your wallet.");
+        render();
+    },4000);
+}
+
+render();
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

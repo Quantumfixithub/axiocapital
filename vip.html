@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Levels - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;color:#333;padding-bottom:80px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px;position:sticky;top:0;z-index:100}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;cursor:pointer;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .intro-card{background:linear-gradient(135deg,#0A1628,#1a2942);border-radius:20px;padding:30px;margin-bottom:20px;color:#fff;text-align:center}
+        .intro-icon{font-size:48px;margin-bottom:12px}
+        .intro-title{font-size:26px;font-weight:700;color:#D4AF37;font-family:'Cormorant Garamond',serif;margin-bottom:8px}
+        .intro-sub{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:15px;border-radius:8px;margin-bottom:20px;font-size:13px;color:#0A1628;line-height:1.9}
+        .vip-card{background:#fff;border-radius:16px;padding:22px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);border-left:4px solid;transition:all .3s}
+        .vip-card:hover{transform:translateY(-3px);box-shadow:0 5px 20px rgba(0,0,0,.1)}
+        .vip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+        .vip-level-info{display:flex;align-items:center;gap:10px}
+        .vip-icon{font-size:26px}
+        .vip-name{font-size:20px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif}
+        .vip-amount{font-size:20px;font-weight:700;color:#D4AF37;font-family:'Cormorant Garamond',serif}
+        .vip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+        .vip-detail{background:rgba(212,175,55,.05);padding:11px;border-radius:10px}
+        .vip-detail-label{font-size:11px;color:#999;margin-bottom:4px}
+        .vip-detail-value{font-size:15px;font-weight:700;color:#0A1628}
+        .vip-detail-value.green{color:#4cd964}
+        .btn{width:100%;padding:13px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:1px}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(212,175,55,.4)}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:12px 0 8px;box-shadow:0 -2px 10px rgba(0,0,0,.1);z-index:1000}
+        .nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#999;flex:1}
+        .nav-item.active{color:#D4AF37}
+        .nav-icon{font-size:24px;margin-bottom:4px}
+        .nav-label{font-size:11px;font-weight:500}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">VIP Levels</div>
+</div>
+<div class="container">
+    <div class="intro-card">
+        <div class="intro-icon">&#128081;</div>
+        <div class="intro-title">Choose Your VIP Level</div>
+        <div class="intro-sub">Invest and earn daily returns for 60 days. All amounts in Nigerian Naira (&#8358;).</div>
+    </div>
+    <div class="info-box">
+        &#128204; <strong>Minimum Deposit:</strong> &#8358;7,500 &nbsp;|&nbsp; <strong>Min Withdrawal:</strong> &#8358;3,500<br>
+        &#128204; <strong>Withdrawal Fee:</strong> 10% &nbsp;|&nbsp; <strong>Processing:</strong> 1–24 hours<br>
+        &#128204; <strong>Daily Check-in Bonus:</strong> &#8358;100/day
+    </div>
+    <div id="vipCards"></div>
+</div>
+<div class="bottom-nav">
+    <a href="index.html" class="nav-item"><div class="nav-icon">&#127968;</div><div class="nav-label">Home</div></a>
+    <a href="vip.html" class="nav-item active"><div class="nav-icon">&#128081;</div><div class="nav-label">VIP</div></a>
+    <a href="team.html" class="nav-item"><div class="nav-icon">&#128101;</div><div class="nav-label">Team</div></a>
+    <a href="mine.html" class="nav-item"><div class="nav-icon">&#128100;</div><div class="nav-label">Mine</div></a>
+</div>
+<script>
+const VIP_DATA=[
+  {level:1,icon:'&#129353;',color:'#8B4513',amount:'7,500',amountRaw:7500,daily:'375',days:60,total:'22,500',profit:'15,000'},
+  {level:2,icon:'&#129352;',color:'#C0C0C0',amount:'15,000',amountRaw:15000,daily:'750',days:60,total:'45,000',profit:'30,000'},
+  {level:3,icon:'&#129351;',color:'#FFD700',amount:'30,000',amountRaw:30000,daily:'1,500',days:60,total:'90,000',profit:'60,000'},
+  {level:4,icon:'&#128142;',color:'#00CED1',amount:'60,000',amountRaw:60000,daily:'3,000',days:60,total:'180,000',profit:'120,000'},
+  {level:5,icon:'&#128176;',color:'#FF69B4',amount:'120,000',amountRaw:120000,daily:'6,000',days:60,total:'360,000',profit:'240,000'},
+  {level:6,icon:'&#11088;',color:'#9370DB',amount:'240,000',amountRaw:240000,daily:'12,000',days:60,total:'720,000',profit:'480,000'},
+  {level:7,icon:'&#127775;',color:'#FF6347',amount:'480,000',amountRaw:480000,daily:'24,000',days:60,total:'1,440,000',profit:'960,000'},
+  {level:8,icon:'&#127942;',color:'#32CD32',amount:'960,000',amountRaw:960000,daily:'48,000',days:60,total:'2,880,000',profit:'1,920,000'},
+  {level:9,icon:'&#128081;',color:'#FF8C00',amount:'1,920,000',amountRaw:1920000,daily:'96,000',days:60,total:'5,760,000',profit:'3,840,000'},
+  {level:10,icon:'&#128171;',color:'#DC143C',amount:'3,840,000',amountRaw:3840000,daily:'192,000',days:60,total:'11,520,000',profit:'7,680,000'}
+];
+const BENEFITS=[
+  ['Daily automated returns','24/7 customer support','Referral commissions'],
+  ['All VIP 1 benefits','Priority withdrawals','Exclusive market insights'],
+  ['All VIP 2 benefits','Dedicated account manager','Higher referral rates'],
+  ['All VIP 3 benefits','VIP-only opportunities','Premium 24/7 support'],
+  ['All VIP 4 benefits','Monthly strategy calls','Early product access'],
+  ['All VIP 5 benefits','Personalised portfolio','Exclusive events access'],
+  ['All VIP 6 benefits','Private investment deals','Tax optimisation consult'],
+  ['All VIP 7 benefits','Wealth management','Annual performance bonus'],
+  ['All VIP 8 benefits','Executive board access','Concierge service'],
+  ['All VIP 9 benefits','Equity partnership','Lifetime premium membership']
+];
+const container=document.getElementById('vipCards');
+VIP_DATA.forEach((v,i)=>{
+  container.innerHTML+=`
+  <div class="vip-card" style="border-left-color:${v.color}">
+    <div class="vip-header">
+      <div class="vip-level-info"><span class="vip-icon">${v.icon}</span><span class="vip-name">VIP ${v.level}</span></div>
+      <span class="vip-amount">&#8358;${v.amount}</span>
+    </div>
+    <div class="vip-grid">
+      <div class="vip-detail"><div class="vip-detail-label">Daily Return</div><div class="vip-detail-value green">&#8358;${v.daily}</div></div>
+      <div class="vip-detail"><div class="vip-detail-label">Duration</div><div class="vip-detail-value">${v.days} Days</div></div>
+      <div class="vip-detail"><div class="vip-detail-label">Total Return</div><div class="vip-detail-value">&#8358;${v.total}</div></div>
+      <div class="vip-detail"><div class="vip-detail-label">Net Profit</div><div class="vip-detail-value green">&#8358;${v.profit}</div></div>
+    </div>
+    <ul style="list-style:none;padding:0;margin-bottom:14px">
+      ${BENEFITS[i].map(b=>`<li style="font-size:13px;color:#666;padding:3px 0 3px 18px;position:relative"><span style="position:absolute;left:0;color:#4cd964;font-weight:700">&#10003;</span>${b}</li>`).join('')}
+    </ul>
+    <button class="btn" onclick="selectVIP(${v.level},${v.amountRaw})">Purchase VIP ${v.level}</button>
+  </div>`;
+});
+function selectVIP(level,amount){
+  if(confirm('Purchase VIP Level '+level+' for &#8358;'+amount.toLocaleString('en-NG')+'?\n\nYou will be redirected to deposit.')){
+    localStorage.setItem('selectedVIPLevel',level);
+    localStorage.setItem('selectedVIPAmount',amount);
+    window.location.href='recharge.html';
+  }
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

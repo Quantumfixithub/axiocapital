@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: #f5f7fa; color: #333; padding-bottom: 20px; }
+        .header { background: linear-gradient(135deg, #0A1628 0%, #1a2942 100%); color: #fff; padding: 15px 20px; display: flex; align-items: center; gap: 15px; }
+        .back-btn { background: none; border: none; color: #D4AF37; font-size: 24px; cursor: pointer; text-decoration: none; }
+        .header-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #D4AF37; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .card { background: #fff; border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section-title { font-size: 20px; font-weight: 600; color: #0A1628; margin-bottom: 15px; font-family: 'Cormorant Garamond', serif; }
+        .help-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .help-item { padding: 20px; background: rgba(212, 175, 55, 0.05); border-radius: 12px; text-align: center; text-decoration: none; color: #333; transition: all 0.3s; }
+        .help-item:hover { background: rgba(212, 175, 55, 0.1); transform: translateY(-2px); }
+        .help-icon { font-size: 36px; margin-bottom: 10px; }
+        .help-title { font-size: 14px; font-weight: 600; color: #0A1628; }
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+    <div class="header">
+        <a href="settings.html" class="back-btn">←</a>
+        <div class="header-title">Help & Support</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2 class="section-title">How Can We Help?</h2>
+            <div class="help-grid">
+                <a href="faq.html" class="help-item">
+                    <div class="help-icon">❓</div>
+                    <div class="help-title">FAQ</div>
+                </a>
+                <a href="contact.html" class="help-item">
+                    <div class="help-icon">💬</div>
+                    <div class="help-title">Contact Us</div>
+                </a>
+                <a href="about.html" class="help-item">
+                    <div class="help-icon">ℹ️</div>
+                    <div class="help-title">About</div>
+                </a>
+                <a href="terms.html" class="help-item">
+                    <div class="help-icon">📄</div>
+                    <div class="help-title">Terms</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Popular Topics</h2>
+            <div style="font-size: 14px; line-height: 2; color: #666;">
+                <a href="faq.html" style="display: block; color: #D4AF37; text-decoration: none;">→ How to deposit funds</a>
+                <a href="faq.html" style="display: block; color: #D4AF37; text-decoration: none;">→ How to withdraw</a>
+                <a href="faq.html" style="display: block; color: #D4AF37; text-decoration: none;">→ VIP levels explained</a>
+                <a href="faq.html" style="display: block; color: #D4AF37; text-decoration: none;">→ Referral program</a>
+                <a href="faq.html" style="display: block; color: #D4AF37; text-decoration: none;">→ Account security</a>
+            </div>
+        </div>
+    </div>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

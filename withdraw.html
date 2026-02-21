@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;padding-bottom:20px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .balance-card{background:linear-gradient(135deg,#D4AF37,#F4E4A6);border-radius:14px;padding:22px;text-align:center;margin-bottom:22px}
+        .bal-label{color:#0A1628;font-size:14px;opacity:.8;margin-bottom:5px}
+        .bal-amount{font-size:36px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif}
+        .card{background:#fff;border-radius:16px;padding:25px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+        .form-group{margin-bottom:18px}
+        label{display:block;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:600}
+        input,select{width:100%;padding:13px 16px;border:1.5px solid rgba(212,175,55,.3);border-radius:12px;font-size:14px;font-family:'Montserrat',sans-serif;color:#333;background:#fff}
+        input:focus,select:focus{outline:none;border-color:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+        .quick-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+        .qbtn{padding:9px 4px;background:rgba(212,175,55,.1);border:1px solid #D4AF37;color:#D4AF37;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+        .qbtn:hover,.qbtn.max{background:#D4AF37;color:#0A1628}
+        .fee-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:rgba(212,175,55,.06);border-radius:8px;margin-bottom:10px;font-size:14px}
+        .fee-row.receive{background:rgba(76,217,100,.08);border:1px solid rgba(76,217,100,.25)}
+        .fee-row.receive span:last-child{font-weight:700;color:#27ae60;font-size:16px}
+        .pw-wrap{position:relative}
+        .pw-wrap input{padding-right:48px}
+        .pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:#D4AF37}
+        .security-note{background:rgba(231,76,60,.06);border-left:3px solid #e74c3c;padding:12px 15px;border-radius:8px;font-size:13px;color:#c0392b;margin-bottom:18px}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:14px;border-radius:8px;font-size:13px;color:#0A1628;line-height:1.9;margin-bottom:18px}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:16px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">Withdraw Funds</div>
+</div>
+<div class="container">
+    <div class="balance-card">
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount" id="displayBal">&#8358;0.00</div>
+    </div>
+    <div class="card">
+        <form onsubmit="doWithdraw(event)">
+            <div class="form-group">
+                <label>Withdrawal Amount (&#8358;)</label>
+                <input type="number" id="amount" placeholder="Minimum &#8358;3,500" min="3500" step="100" required oninput="calcFee()">
+                <div class="quick-row">
+                    <div class="qbtn" onclick="setAmt(5000)">&#8358;5K</div>
+                    <div class="qbtn" onclick="setAmt(10000)">&#8358;10K</div>
+                    <div class="qbtn" onclick="setAmt(50000)">&#8358;50K</div>
+                    <div class="qbtn max" onclick="setMax()">MAX</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Withdrawal Method</label>
+                <select id="method" required>
+                    <option value="">Select method</option>
+                    <option value="bank">Bank Transfer</option>
+                    <option value="usdt">USDT (TRC20)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Bank Name</label>
+                <input type="text" id="bankName" placeholder="e.g. GTBank, Access, Zenith..." required>
+            </div>
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" id="accNum" placeholder="10-digit account number" maxlength="10" required>
+            </div>
+            <div class="form-group">
+                <label>Account Name</label>
+                <input type="text" id="accName" placeholder="Account holder full name" required>
+            </div>
+            <div class="fee-row"><span>Processing Fee (10%):</span><span id="feeAmt">&#8358;0.00</span></div>
+            <div class="fee-row receive"><span>You Will Receive:</span><span id="receiveAmt">&#8358;0.00</span></div>
+            <div class="security-note">&#128274; Security check: You must enter your account password to confirm this withdrawal.</div>
+            <div class="form-group">
+                <label>Account Password</label>
+                <div class="pw-wrap">
+                    <input type="password" id="userPw" placeholder="Enter your password to confirm" required>
+                    <button type="button" class="pw-toggle" onclick="togglePw()">&#128065;</button>
+                </div>
+            </div>
+            <div class="info-box">
+                &#128204; Min withdrawal: &#8358;3,500<br>
+                &#128204; Fee: 10% deducted from amount<br>
+                &#128204; Processing: 1–24 hours after admin approval<br>
+                &#128204; Ensure bank details are correct before submitting
+            </div>
+            <button type="submit" class="btn">&#128176; Submit Withdrawal</button>
+        </form>
+    </div>
+</div>
+<script>
+const bal=parseFloat(localStorage.getItem('userBalance')||'125000');
+document.getElementById('displayBal').innerHTML='&#8358;'+bal.toLocaleString('en-NG',{minimumFractionDigits:2});
+
+function setAmt(v){document.getElementById('amount').value=v;calcFee();}
+function setMax(){document.getElementById('amount').value=bal;calcFee();}
+function calcFee(){
+    const a=parseFloat(document.getElementById('amount').value)||0;
+    document.getElementById('feeAmt').innerHTML='&#8358;'+(a*.1).toLocaleString('en-NG',{minimumFractionDigits:2});
+    document.getElementById('receiveAmt').innerHTML='&#8358;'+(a*.9).toLocaleString('en-NG',{minimumFractionDigits:2});
+}
+function togglePw(){const i=document.getElementById('userPw');i.type=i.type==='password'?'text':'password';}
+
+function doWithdraw(e){
+    e.preventDefault();
+    const amount=parseFloat(document.getElementById('amount').value);
+    const method=document.getElementById('method').value;
+    const pw=document.getElementById('userPw').value;
+    const bankName=document.getElementById('bankName').value;
+    const accNum=document.getElementById('accNum').value;
+    const accName=document.getElementById('accName').value;
+
+    if(amount<3500){alert('Minimum withdrawal is \u20A63,500');return;}
+    if(amount>bal){alert('Insufficient balance!');return;}
+
+    // Password check
+    const storedPw=localStorage.getItem('userPassword')||'password123';
+    if(pw!==storedPw){alert('\u274C Incorrect password. Please try again.');document.getElementById('userPw').value='';return;}
+
+    // Save withdrawal request for admin
+    const pending=JSON.parse(localStorage.getItem('pendingWithdrawals')||'[]');
+    pending.push({
+        id:'W'+Date.now(),
+        userId:localStorage.getItem('userId')||'user001',
+        userName:localStorage.getItem('userName')||'Member',
+        amount,fee:amount*.1,netAmount:amount*.9,
+        method,bankName,accNum,accName,
+        status:'pending',
+        date:new Date().toISOString()
+    });
+    localStorage.setItem('pendingWithdrawals',JSON.stringify(pending));
+
+    alert('\u2705 Withdrawal Request Submitted!\n\nAmount: \u20A6'+amount.toLocaleString('en-NG')+'\nYou will receive: \u20A6'+(amount*.9).toLocaleString('en-NG')+'\n\nPending admin approval — processed within 1\u201324 hours.');
+    setTimeout(()=>window.location.href='index.html',800);
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

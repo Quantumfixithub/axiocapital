@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Game - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#0f051e;min-height:100vh;color:#fff;padding-bottom:20px}
+        .header{background:rgba(255,255,255,.04);border-bottom:1px solid rgba(192,132,252,.15);padding:16px 20px;display:flex;align-items:center;gap:14px}
+        .back-btn{background:none;border:none;color:#c084fc;font-size:24px;cursor:pointer;text-decoration:none;transition:all .2s}
+        .back-btn:hover{transform:translateX(-3px)}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#c084fc}
+        .container{max-width:480px;margin:0 auto;padding:24px 20px}
+        /* Hero */
+        .hero{text-align:center;padding:32px 20px;background:linear-gradient(135deg,rgba(138,43,226,.2),rgba(75,0,130,.3));border-radius:24px;margin-bottom:24px;border:1px solid rgba(192,132,252,.2)}
+        .hero-icon{font-size:72px;margin-bottom:14px;animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .hero h1{font-family:'Cormorant Garamond',serif;font-size:32px;color:#c084fc;margin-bottom:8px}
+        .hero-sub{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:18px}
+        .prize-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(76,217,100,.15);border:1px solid rgba(76,217,100,.35);color:#4cd964;padding:10px 22px;border-radius:30px;font-size:16px;font-weight:700;font-family:'Cormorant Garamond',serif}
+        /* Game card */
+        .game-card{background:rgba(255,255,255,.04);border-radius:20px;padding:28px;margin-bottom:20px;border:1px solid rgba(192,132,252,.15)}
+        .game-card h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:#c084fc;margin-bottom:8px;text-align:center}
+        .game-card .instruction{font-size:13px;color:rgba(255,255,255,.6);text-align:center;margin-bottom:24px;line-height:1.6}
+        .number-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+        .num-btn{padding:20px 10px;background:rgba(192,132,252,.1);border:2px solid rgba(192,132,252,.25);border-radius:16px;color:#c084fc;font-size:26px;font-weight:700;cursor:pointer;transition:all .25s;font-family:'Cormorant Garamond',serif;position:relative}
+        .num-btn:hover:not(:disabled){background:rgba(192,132,252,.22);transform:translateY(-3px);box-shadow:0 8px 24px rgba(138,43,226,.35);border-color:#c084fc}
+        .num-btn:disabled{cursor:not-allowed}
+        .num-btn.correct{background:rgba(76,217,100,.2)!important;border-color:#4cd964!important;color:#4cd964!important;transform:scale(1.08)}
+        .num-btn.wrong{background:rgba(231,76,60,.15)!important;border-color:#e74c3c!important;color:#e74c3c!important}
+        .num-btn.reveal{background:rgba(76,217,100,.1);border-color:rgba(76,217,100,.4);color:rgba(76,217,100,.7)}
+        /* Result */
+        .result-box{border-radius:16px;padding:22px;text-align:center;display:none;margin-bottom:20px;animation:slideUp .4s ease}
+        @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .result-box.win{background:rgba(76,217,100,.12);border:1px solid rgba(76,217,100,.3)}
+        .result-box.lose{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3)}
+        .result-emoji{font-size:52px;margin-bottom:10px}
+        .result-title{font-size:22px;font-weight:700;margin-bottom:6px;font-family:'Cormorant Garamond',serif}
+        .result-win .result-title{color:#4cd964}
+        .result-lose .result-title{color:#ff7875}
+        .result-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.6}
+        .win-amount{font-size:44px;font-weight:700;color:#4cd964;font-family:'Cormorant Garamond',serif;margin:10px 0}
+        .credited-tag{display:inline-block;background:rgba(76,217,100,.15);border:1px solid rgba(76,217,100,.3);color:#4cd964;padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-top:4px}
+        /* Already played */
+        .played-card{background:rgba(255,255,255,.04);border-radius:20px;padding:32px;text-align:center;border:1px solid rgba(192,132,252,.15);margin-bottom:20px}
+        .played-icon{font-size:60px;margin-bottom:14px}
+        .played-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:#c084fc;margin-bottom:8px}
+        .countdown{font-size:38px;font-weight:700;color:#fff;font-family:'Cormorant Garamond',serif;margin:16px 0}
+        .countdown-label{font-size:12px;color:rgba(255,255,255,.45)}
+        /* History */
+        .history-card{background:rgba(255,255,255,.04);border-radius:20px;padding:22px;border:1px solid rgba(192,132,252,.1)}
+        .history-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:#c084fc;margin-bottom:16px}
+        .hist-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
+        .hist-row:last-child{border-bottom:none}
+        .hist-won{color:#4cd964;font-weight:700}
+        .hist-lost{color:rgba(255,255,255,.35);font-style:italic}
+        .empty-hist{text-align:center;color:rgba(255,255,255,.3);padding:20px;font-size:14px}
+        /* Rules */
+        .rules-card{background:rgba(192,132,252,.06);border-left:3px solid #c084fc;border-radius:0 14px 14px 0;padding:16px 18px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.9}
+        /* Nav */
+        .back-home{width:100%;padding:15px;background:linear-gradient(135deg,#7c3aed,#9333ea);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+        .back-home:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,.45)}
+        /* Chatbot FAB */
+        .chat-fab{position:fixed;bottom:24px;right:20px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#006699);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:999;text-decoration:none;transition:all .3s}
+        .chat-fab:hover{transform:scale(1.1)}
+        .chat-fab svg{width:26px;height:26px;fill:#fff}
+        .chat-pulse{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2px solid #fff;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
+    </style>
+</head>
+<body>
+
+<script>
+(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect','daily-game.html');window.location.replace('login.html');}})();
+</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">🎮 Daily Lucky Number</div>
+</div>
+
+<div class="container">
+    <div class="hero">
+        <div class="hero-icon">🎯</div>
+        <h1>Daily Lucky Number</h1>
+        <div class="hero-sub">Guess the hidden number between 1–9.<br>Get it right and earn <strong style="color:#4cd964">₦10</strong> instantly — once every 24 hours!</div>
+        <span class="prize-chip">🏆 Daily Prize: ₦10</span>
+    </div>
+
+    <div class="rules-card">
+        📌 <strong>How it works:</strong><br>
+        • A random number between 1 and 9 is chosen<br>
+        • Pick the number you think it is<br>
+        • Correct guess = <strong style="color:#4cd964">₦10 credited to your wallet</strong><br>
+        • One attempt per day — resets every 24 hours<br>
+        • Wrong guess = try again tomorrow!
+    </div>
+
+    <div id="mainGameArea"></div>
+
+    <div class="history-card" id="historyCard" style="margin-top:20px">
+        <h3>📅 Game History</h3>
+        <div id="historyList"><div class="empty-hist">No games played yet. Play today!</div></div>
+    </div>
+
+    <br>
+    <a href="index.html" class="back-home">🏠 Back to Dashboard</a>
+</div>
+
+<!-- Telegram Chatbot FAB -->
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" title="Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+</a>
+
+<script>
+const uid = localStorage.getItem('userId')||'';
+
+function getHistory(){return JSON.parse(localStorage.getItem('gameHistory_'+uid)||'[]');}
+function saveHistory(h){localStorage.setItem('gameHistory_'+uid,JSON.stringify(h));}
+function getLastPlay(){return localStorage.getItem('lastGamePlay_'+uid)||null;}
+
+function playedToday(){
+    const last = getLastPlay();
+    if(!last) return false;
+    return new Date(last).toDateString() === new Date().toDateString();
+}
+
+function timeUntilNextGame(){
+    const last = new Date(getLastPlay());
+    const next = new Date(last.getTime() + 24*60*60*1000);
+    const diff = next - new Date();
+    if(diff <= 0) return null;
+    const h = Math.floor(diff/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    return {h,m,s,total:diff};
+}
+
+function renderGame(){
+    const area = document.getElementById('mainGameArea');
+
+    if(playedToday()){
+        const t = timeUntilNextGame();
+        area.innerHTML = `
+        <div class="played-card">
+            <div class="played-icon">⏳</div>
+            <div class="played-title">Already Played Today!</div>
+            <p style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:12px">Next game in:</p>
+            <div class="countdown" id="countdown">${t?t.h+'h '+t.m+'m '+t.s+'s':'Refreshing...'}</div>
+            <div class="countdown-label">New game available every 24 hours</div>
+        </div>`;
+        // Start countdown timer
+        if(t && t.total > 0){
+            const timer = setInterval(()=>{
+                const r = timeUntilNextGame();
+                if(!r){clearInterval(timer);location.reload();return;}
+                const el = document.getElementById('countdown');
+                if(el) el.textContent = r.h+'h '+r.m+'m '+r.s+'s';
+                else clearInterval(timer);
+            },1000);
+        }
+    } else {
+        // Generate game
+        const answer = Math.floor(Math.random()*9)+1;
+        // Shuffle numbers 1-9
+        const nums = [1,2,3,4,5,6,7,8,9];
+        for(let i=8;i>0;i--){const j=Math.floor(Math.random()*(i+1));[nums[i],nums[j]]=[nums[j],nums[i]];}
+
+        area.innerHTML = `
+        <div class="game-card">
+            <h2>Pick Your Lucky Number</h2>
+            <div class="instruction">I'm thinking of a number between 1 and 9.<br>One chance — make it count! 🍀</div>
+            <div class="number-grid" id="numGrid">
+                ${nums.map(n=>`<button class="num-btn" onclick="guess(${n},${answer})">${n}</button>`).join('')}
+            </div>
+            <div class="result-box" id="resultBox"></div>
+        </div>`;
+    }
+    renderHistory();
+}
+
+function guess(chosen, answer){
+    const btns = document.querySelectorAll('.num-btn');
+    btns.forEach(b=>b.disabled=true);
+
+    const isWin = chosen === answer;
+
+    // Highlight
+    btns.forEach(b=>{
+        const val = parseInt(b.textContent);
+        if(val === answer) b.classList.add('correct');
+        else if(val === chosen && !isWin) b.classList.add('wrong');
+        else b.classList.add('reveal');
+    });
+
+    // Result
+    const box = document.getElementById('resultBox');
+    box.style.display = 'block';
+
+    if(isWin){
+        box.className = 'result-box win';
+        box.innerHTML = `
+            <div class="result-emoji">🎉</div>
+            <div class="result-title" style="color:#4cd964">Brilliant! You got it!</div>
+            <div class="win-amount">+₦10</div>
+            <div class="credited-tag">✓ Credited to your wallet</div>
+            <p class="result-sub" style="margin-top:12px">The number was <strong>${answer}</strong>. Your ₦10 has been added to your balance!</p>`;
+        // Credit balance
+        let bal = parseFloat(localStorage.getItem('userBalance')||'0');
+        bal += 10;
+        localStorage.setItem('userBalance', bal.toString());
+        // Record win
+        const wins = JSON.parse(localStorage.getItem('gameWins_'+uid)||'[]');
+        wins.unshift({amount:10,date:new Date().toISOString()});
+        localStorage.setItem('gameWins_'+uid,JSON.stringify(wins));
+    } else {
+        box.className = 'result-box lose';
+        box.innerHTML = `
+            <div class="result-emoji">😔</div>
+            <div class="result-title" style="color:#ff7875">Not This Time!</div>
+            <p class="result-sub" style="margin-top:8px">The number was <strong style="color:#c084fc;font-size:20px">${answer}</strong>.<br>Better luck tomorrow — game resets in 24 hours!</p>`;
+    }
+
+    // Mark as played
+    localStorage.setItem('lastGamePlay_'+uid, new Date().toISOString());
+
+    // Save to history
+    const hist = getHistory();
+    hist.unshift({chosen, answer, won:isWin, date:new Date().toISOString()});
+    saveHistory(hist.slice(0,14)); // keep last 14 days
+
+    renderHistory();
+}
+
+function renderHistory(){
+    const hist = getHistory();
+    const el = document.getElementById('historyList');
+    if(!hist.length){
+        el.innerHTML = '<div class="empty-hist">No games played yet. Play today!</div>';
+        return;
+    }
+    el.innerHTML = hist.slice(0,7).map(h=>`
+    <div class="hist-row">
+        <span style="color:rgba(255,255,255,.6)">${new Date(h.date).toLocaleDateString('en-NG',{weekday:'short',month:'short',day:'numeric'})}</span>
+        <span>Guessed <strong style="color:#c084fc">${h.chosen}</strong> | Answer <strong style="color:#c084fc">${h.answer}</strong></span>
+        <span class="${h.won?'hist-won':'hist-lost'}">${h.won?'+₦10':'No win'}</span>
+    </div>`).join('');
+}
+
+renderGame();
+</script>
+</body>
+</html>

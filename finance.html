@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Products - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;color:#333;padding-bottom:80px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:15px;border-radius:8px;margin-bottom:20px;font-size:13px;color:#0A1628;line-height:1.8}
+        .product-card{background:#fff;border-radius:16px;padding:25px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);position:relative;overflow:hidden}
+        .product-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+        .premium::before{background:linear-gradient(90deg,#6c757d,#adb5bd)}
+        .gold::before{background:linear-gradient(90deg,#D4AF37,#F4E4A6)}
+        .platinum::before{background:linear-gradient(90deg,#0A1628,#1a2942)}
+        .plan-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+        .plan-name{font-size:26px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif}
+        .plan-badge{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600}
+        .badge-silver{background:rgba(108,117,125,.1);color:#6c757d}
+        .badge-gold{background:rgba(212,175,55,.15);color:#B8960C}
+        .badge-platinum{background:rgba(10,22,40,.1);color:#0A1628}
+        .plan-amount{font-size:32px;font-weight:700;color:#D4AF37;font-family:'Cormorant Garamond',serif;margin-bottom:16px}
+        .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+        .plan-detail{background:rgba(212,175,55,.05);padding:12px;border-radius:10px}
+        .plan-detail-label{font-size:11px;color:#999;margin-bottom:4px}
+        .plan-detail-value{font-size:16px;font-weight:700;color:#0A1628}
+        .plan-detail-value.green{color:#4cd964}
+        .withdrawal-note{background:rgba(76,217,100,.08);border-left:3px solid #4cd964;padding:12px 15px;border-radius:8px;font-size:13px;color:#0A1628;margin-bottom:16px;line-height:1.6}
+        .plan-desc{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
+        .btn{width:100%;padding:14px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:15px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:12px 0 8px;box-shadow:0 -2px 10px rgba(0,0,0,.1);z-index:1000}
+        .nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#999;flex:1}
+        .nav-item.active{color:#D4AF37}
+        .nav-icon{font-size:24px;margin-bottom:4px}
+        .nav-label{font-size:11px;font-weight:500}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">Finance Products</div>
+</div>
+<div class="container">
+    <div class="info-box">
+        &#128204; All plans are in Nigerian Naira (&#8358;)<br>
+        &#128204; Capital &amp; earnings can be withdrawn at the <strong>end of each month</strong><br>
+        &#128204; Minimum withdrawal: &#8358;3,500 &nbsp;|&nbsp; Fee: 10%
+    </div>
+
+    <!-- Premium Plan -->
+    <div class="product-card premium">
+        <div class="plan-header">
+            <div class="plan-name">Premium Plan</div>
+            <span class="plan-badge badge-silver">&#127942; Starter</span>
+        </div>
+        <div class="plan-amount">&#8358;200,000</div>
+        <div class="plan-grid">
+            <div class="plan-detail"><div class="plan-detail-label">Daily Return</div><div class="plan-detail-value green">5%</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Daily Amount</div><div class="plan-detail-value green">&#8358;10,000</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Duration</div><div class="plan-detail-value">90 Days</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Total Return</div><div class="plan-detail-value">&#8358;900,000</div></div>
+        </div>
+        <div class="withdrawal-note">
+            &#9989; Withdraw capital + earnings at end of each month (every 30 days)
+        </div>
+        <div class="plan-desc">Perfect entry-level plan. Earn &#8358;10,000 daily over 90 days for a total return of &#8358;900,000 on your &#8358;200,000 investment.</div>
+        <button class="btn" onclick="invest('Premium',200000)">Invest &#8358;200,000</button>
+    </div>
+
+    <!-- Gold Plan -->
+    <div class="product-card gold">
+        <div class="plan-header">
+            <div class="plan-name">Gold Plan</div>
+            <span class="plan-badge badge-gold">&#11088; Best Value</span>
+        </div>
+        <div class="plan-amount">&#8358;500,000</div>
+        <div class="plan-grid">
+            <div class="plan-detail"><div class="plan-detail-label">Daily Return</div><div class="plan-detail-value green">6%</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Daily Amount</div><div class="plan-detail-value green">&#8358;30,000</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Duration</div><div class="plan-detail-value">120 Days</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Total Return</div><div class="plan-detail-value">&#8358;3,600,000</div></div>
+        </div>
+        <div class="withdrawal-note">
+            &#9989; Withdraw capital + earnings at end of each month (every 30 days)
+        </div>
+        <div class="plan-desc">Enhanced returns for serious investors. Earn &#8358;30,000 daily over 120 days. Total return of &#8358;3,600,000 on &#8358;500,000.</div>
+        <button class="btn" onclick="invest('Gold',500000)">Invest &#8358;500,000</button>
+    </div>
+
+    <!-- Platinum Plan -->
+    <div class="product-card platinum">
+        <div class="plan-header">
+            <div class="plan-name">Platinum Plan</div>
+            <span class="plan-badge badge-platinum">&#128171; Exclusive</span>
+        </div>
+        <div class="plan-amount">&#8358;1,000,000</div>
+        <div class="plan-grid">
+            <div class="plan-detail"><div class="plan-detail-label">Daily Return</div><div class="plan-detail-value green">7%</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Daily Amount</div><div class="plan-detail-value green">&#8358;70,000</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Duration</div><div class="plan-detail-value">150 Days</div></div>
+            <div class="plan-detail"><div class="plan-detail-label">Total Return</div><div class="plan-detail-value">&#8358;10,500,000</div></div>
+        </div>
+        <div class="withdrawal-note">
+            &#9989; Withdraw capital + earnings at end of each month (every 30 days)
+        </div>
+        <div class="plan-desc">Maximum returns for elite investors. Earn &#8358;70,000 daily over 150 days. Total return of &#8358;10,500,000 on &#8358;1,000,000.</div>
+        <button class="btn" onclick="invest('Platinum',1000000)">Invest &#8358;1,000,000</button>
+    </div>
+</div>
+<div class="bottom-nav">
+    <a href="index.html" class="nav-item"><div class="nav-icon">&#127968;</div><div class="nav-label">Home</div></a>
+    <a href="vip.html" class="nav-item"><div class="nav-icon">&#128081;</div><div class="nav-label">VIP</div></a>
+    <a href="team.html" class="nav-item"><div class="nav-icon">&#128101;</div><div class="nav-label">Team</div></a>
+    <a href="mine.html" class="nav-item"><div class="nav-icon">&#128100;</div><div class="nav-label">Mine</div></a>
+</div>
+<script>
+function invest(plan,amount){
+    if(confirm('Invest in '+plan+' Plan?\n\nAmount: \u20A6'+amount.toLocaleString('en-NG')+'\n\nYou will be redirected to deposit.')){
+        localStorage.setItem('selectedPlan',plan);
+        localStorage.setItem('planAmount',amount);
+        window.location.href='recharge.html';
+    }
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:linear-gradient(135deg,#0A1628 0%,#1a2942 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+        .login-card{background:#fff;border-radius:24px;padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+        .logo-area{text-align:center;margin-bottom:30px}
+        .logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:#D4AF37}
+        .logo-sub{font-size:12px;color:#999;letter-spacing:2px;margin-top:4px}
+        .admin-badge{display:inline-block;background:rgba(231,76,60,.1);color:#e74c3c;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-top:8px}
+        .form-group{margin-bottom:18px}
+        label{display:block;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:600}
+        input{width:100%;padding:14px 16px;border:1.5px solid rgba(212,175,55,.3);border-radius:12px;font-size:14px;font-family:'Montserrat',sans-serif;color:#333}
+        input:focus{outline:none;border-color:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#0A1628,#1a2942);border:none;border-radius:12px;color:#D4AF37;font-size:15px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;margin-top:8px;transition:all .3s}
+        .btn:hover{opacity:.9;transform:translateY(-2px)}
+        .error{color:#e74c3c;font-size:13px;text-align:center;margin-top:10px;display:none}
+        .back-link{display:block;text-align:center;margin-top:20px;color:#999;font-size:13px;text-decoration:none}
+        .back-link:hover{color:#D4AF37}
+        .shield{font-size:48px;margin-bottom:10px}
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <div class="logo-area">
+        <div class="shield">&#128737;</div>
+        <div class="logo">Axio Capital</div>
+        <div class="logo-sub">ADMIN PORTAL</div>
+        <div class="admin-badge">&#128274; Protected Area</div>
+    </div>
+    <form onsubmit="adminLogin(event)">
+        <div class="form-group">
+            <label>Admin Username</label>
+            <input type="text" id="adminUser" placeholder="Enter admin username" required autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label>Admin Password</label>
+            <input type="password" id="adminPw" placeholder="Enter admin password" required>
+        </div>
+        <button type="submit" class="btn">&#128737; Access Dashboard</button>
+        <div class="error" id="errMsg">&#10060; Invalid credentials. Access denied.</div>
+    </form>
+    <a href="index.html" class="back-link">&#8592; Back to main site</a>
+</div>
+<script>
+// Admin credentials (in production these would be server-side)
+const ADMIN_CREDS={username:'axioadmin',password:'AxioAdmin@2025!'};
+
+function adminLogin(e){
+    e.preventDefault();
+    const u=document.getElementById('adminUser').value;
+    const p=document.getElementById('adminPw').value;
+    if(u===ADMIN_CREDS.username&&p===ADMIN_CREDS.password){
+        localStorage.setItem('adminAuth','true');
+        localStorage.setItem('adminAuthTime',Date.now().toString());
+        window.location.href='admin-dashboard.html';
+    } else {
+        document.getElementById('errMsg').style.display='block';
+        document.getElementById('adminPw').value='';
+    }
+}
+</script>
+</body>
+</html>

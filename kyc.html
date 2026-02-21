@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;padding-bottom:20px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .status-card{text-align:center;padding:32px}
+        .status-icon{font-size:60px;margin-bottom:14px}
+        .status-title{font-size:22px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif;margin-bottom:8px}
+        .status-text{font-size:14px;color:#666;line-height:1.7}
+        .badge{display:inline-block;padding:6px 20px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:18px}
+        .badge-pending{background:rgba(255,211,61,.1);color:#d4a017}
+        .badge-approved{background:rgba(76,217,100,.1);color:#27ae60}
+        .badge-rejected{background:rgba(231,76,60,.1);color:#e74c3c}
+        .badge-none{background:rgba(153,153,153,.1);color:#999}
+        .section-title{font-size:20px;font-weight:600;color:#0A1628;margin-bottom:16px;font-family:'Cormorant Garamond',serif}
+        .form-group{margin-bottom:16px}
+        label{display:block;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:600}
+        input,select{width:100%;padding:13px 16px;border:1.5px solid rgba(212,175,55,.3);border-radius:12px;font-size:14px;font-family:'Montserrat',sans-serif;color:#333;background:#fff}
+        input:focus,select:focus{outline:none;border-color:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+        .upload-box{border:2px dashed #D4AF37;border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .3s;background:#fff}
+        .upload-box:hover{background:rgba(212,175,55,.04)}
+        .upload-icon{font-size:40px;margin-bottom:10px}
+        .upload-text{font-size:13px;color:#888}
+        .uploaded{display:none;margin-top:8px;font-size:13px;color:#4cd964;font-weight:600}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:14px;border-radius:8px;font-size:13px;color:#0A1628;line-height:1.9;margin-bottom:16px}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:15px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+        .steps{display:flex;gap:10px;margin-bottom:20px}
+        .step{flex:1;text-align:center;padding:12px 8px;background:rgba(212,175,55,.06);border-radius:10px;font-size:12px;color:#666}
+        .step-num{width:28px;height:28px;background:#D4AF37;color:#0A1628;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin:0 auto 6px}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="mine.html" class="back-btn">&#8592;</a>
+    <div class="header-title">KYC Verification</div>
+</div>
+<div class="container" id="pageContent">
+</div>
+<script>
+const kycStatus=localStorage.getItem('kycStatus')||'none';
+const el=document.getElementById('pageContent');
+
+if(kycStatus==='approved'){
+    el.innerHTML=`
+    <div class="card status-card">
+        <div class="status-icon">&#9989;</div>
+        <div class="badge badge-approved">&#10003; Verified</div>
+        <div class="status-title">Identity Verified</div>
+        <div class="status-text">Your KYC has been approved. You have full access to all platform features including deposits and withdrawals.</div>
+    </div>`;
+} else if(kycStatus==='pending'){
+    el.innerHTML=`
+    <div class="card status-card">
+        <div class="status-icon">&#9203;</div>
+        <div class="badge badge-pending">&#9203; Under Review</div>
+        <div class="status-title">KYC Submitted</div>
+        <div class="status-text">Your identity documents are being reviewed by our team.<br>This typically takes 1–24 hours.<br><br>You will be notified once your verification is complete.</div>
+    </div>`;
+} else if(kycStatus==='rejected'){
+    el.innerHTML=`
+    <div class="card status-card">
+        <div class="status-icon">&#10060;</div>
+        <div class="badge badge-rejected">&#10060; Rejected</div>
+        <div class="status-title">KYC Rejected</div>
+        <div class="status-text">Your KYC was not approved. Please resubmit with clearer documents. Common reasons: blurry images, expired ID, or mismatched information.</div>
+    </div>
+    <div id="formArea"></div>`;
+    renderForm();
+} else {
+    el.innerHTML=`<div id="formArea"></div>`;
+    renderForm();
+}
+
+function renderForm(){
+    document.getElementById('formArea').innerHTML=`
+    <div class="card">
+        <div class="steps">
+            <div class="step"><div class="step-num">1</div>Personal Info</div>
+            <div class="step"><div class="step-num">2</div>Upload ID</div>
+            <div class="step"><div class="step-num">3</div>Selfie</div>
+        </div>
+        <h2 class="section-title">Identity Verification</h2>
+        <div class="info-box">
+            &#128204; Required to unlock deposits<br>
+            &#128204; Accepted IDs: Passport, Driver's Licence, National ID<br>
+            &#128204; Review time: 1–24 hours after submission
+        </div>
+        <form onsubmit="submitKYC(event)">
+            <div class="form-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="fullName" placeholder="As shown on your ID" required>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g. 08012345678" required>
+            </div>
+            <div class="form-group">
+                <label>ID Type</label>
+                <select id="idType" required>
+                    <option value="">Select ID type</option>
+                    <option value="passport">International Passport</option>
+                    <option value="drivers">Driver's Licence</option>
+                    <option value="national">National ID Card (NIN)</option>
+                    <option value="voters">Voter's Card</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>ID Number</label>
+                <input type="text" id="idNumber" placeholder="Enter your ID number" required>
+            </div>
+            <div class="form-group">
+                <label>Front of ID</label>
+                <div class="upload-box" onclick="document.getElementById('frontFile').click()">
+                    <div class="upload-icon">&#128196;</div>
+                    <div class="upload-text">Tap to upload front of ID</div>
+                    <div class="uploaded" id="frontUploaded">&#10003; Front uploaded</div>
+                    <input type="file" id="frontFile" style="display:none" accept="image/*" onchange="markUploaded('frontUploaded')" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Back of ID</label>
+                <div class="upload-box" onclick="document.getElementById('backFile').click()">
+                    <div class="upload-icon">&#128196;</div>
+                    <div class="upload-text">Tap to upload back of ID</div>
+                    <div class="uploaded" id="backUploaded">&#10003; Back uploaded</div>
+                    <input type="file" id="backFile" style="display:none" accept="image/*" onchange="markUploaded('backUploaded')">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Selfie Holding ID</label>
+                <div class="upload-box" onclick="document.getElementById('selfieFile').click()">
+                    <div class="upload-icon">&#129331;</div>
+                    <div class="upload-text">Tap to upload selfie with your ID visible</div>
+                    <div class="uploaded" id="selfieUploaded">&#10003; Selfie uploaded</div>
+                    <input type="file" id="selfieFile" style="display:none" accept="image/*" onchange="markUploaded('selfieUploaded')" required>
+                </div>
+            </div>
+            <button type="submit" class="btn" style="margin-top:8px">&#128228; Submit for Verification</button>
+        </form>
+    </div>`;
+}
+
+function markUploaded(id){document.getElementById(id).style.display='block';}
+
+function submitKYC(e){
+    e.preventDefault();
+    const fullName=document.getElementById('fullName').value;
+    const idType=document.getElementById('idType').value;
+    const idNumber=document.getElementById('idNumber').value;
+    const phone=document.getElementById('phone').value;
+    const dob=document.getElementById('dob').value;
+    if(!document.getElementById('frontFile').files[0]){alert('Please upload front of ID');return;}
+    if(!document.getElementById('selfieFile').files[0]){alert('Please upload selfie with ID');return;}
+
+    // Save to admin KYC queue
+    const kycs=JSON.parse(localStorage.getItem('kycRequests')||'[]');
+    kycs.push({
+        id:'KYC'+Date.now(),
+        userId:localStorage.getItem('userId')||'user001',
+        userName:localStorage.getItem('userName')||'Member',
+        fullName,idType,idNumber,phone,dob,
+        status:'pending',
+        date:new Date().toISOString()
+    });
+    localStorage.setItem('kycRequests',JSON.stringify(kycs));
+    localStorage.setItem('kycStatus','pending');
+
+    alert('\u2705 KYC Submitted Successfully!\n\nYour documents are under review. You will be notified within 1\u201324 hours.');
+    window.location.reload();
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

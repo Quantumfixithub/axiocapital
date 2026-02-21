@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:linear-gradient(135deg,#0A1628 0%,#1a2942 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
+        .container{width:100%;max-width:420px;animation:fadeUp .5s ease}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        .logo-area{text-align:center;margin-bottom:36px}
+        .logo{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;background:linear-gradient(135deg,#D4AF37,#F4E4A6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+        .tagline{color:rgba(212,175,55,.65);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:5px}
+        .card{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);border-radius:22px;padding:38px 30px;border:1px solid rgba(212,175,55,.22);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+        .card-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:#D4AF37;text-align:center;margin-bottom:5px}
+        .card-sub{text-align:center;color:rgba(255,255,255,.55);font-size:13px;margin-bottom:28px}
+        .form-group{margin-bottom:20px}
+        label{display:block;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:500}
+        .inp-wrap{position:relative}
+        input[type=text],input[type=email],input[type=password],input[type=tel]{width:100%;padding:14px 18px;background:rgba(255,255,255,.09);border:1.5px solid rgba(212,175,55,.28);border-radius:12px;color:#fff;font-size:14px;font-family:'Montserrat',sans-serif;transition:all .3s;-webkit-appearance:none}
+        input:focus{outline:none;border-color:#D4AF37;background:rgba(255,255,255,.13);box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+        input::placeholder{color:rgba(255,255,255,.35)}
+        .eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#D4AF37;font-size:18px;cursor:pointer;padding:4px}
+        .extras{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;font-size:13px}
+        .remember{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.65);cursor:pointer}
+        .remember input{width:16px;height:16px;accent-color:#D4AF37;cursor:pointer}
+        .forgot-link{color:#D4AF37;text-decoration:none;font-size:13px}
+        .forgot-link:hover{color:#F4E4A6}
+        .submit-btn{width:100%;padding:15px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:15px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-family:'Montserrat',sans-serif;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px}
+        .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,175,55,.4)}
+        .submit-btn:disabled{opacity:.55;cursor:not-allowed}
+        .divider{text-align:center;margin:24px 0;position:relative;color:rgba(255,255,255,.4);font-size:13px}
+        .divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:rgba(212,175,55,.2)}
+        .divider::before{left:0}.divider::after{right:0}
+        .register-link{text-align:center;font-size:13px;color:rgba(255,255,255,.6)}
+        .register-link a{color:#D4AF37;text-decoration:none;font-weight:600}
+        .register-link a:hover{color:#F4E4A6}
+        .alert{padding:12px 15px;border-radius:10px;font-size:13px;margin-bottom:18px;display:none;font-weight:500;line-height:1.5}
+        .alert-error{background:rgba(231,76,60,.13);border:1px solid rgba(231,76,60,.32);color:#ff7875}
+        .alert-success{background:rgba(76,217,100,.12);border:1px solid rgba(76,217,100,.3);color:#4cd964}
+        .loader{width:17px;height:17px;border:2.5px solid #0A1628;border-top-color:transparent;border-radius:50%;animation:spin .75s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo-area">
+        <div class="logo">Axio Capital</div>
+        <div class="tagline">Premium Investment Platform</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Welcome Back</div>
+        <div class="card-sub">Sign in to access your dashboard</div>
+        <div class="alert alert-error" id="errMsg"></div>
+        <div class="alert alert-success" id="okMsg"></div>
+        <form onsubmit="doLogin(event)">
+            <div class="form-group">
+                <label>Email or Phone Number</label>
+                <input type="text" id="loginId" placeholder="Enter your email or phone" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="inp-wrap">
+                    <input type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password" required>
+                    <button type="button" class="eye-btn" onclick="togglePw('loginPw',this)">&#128065;</button>
+                </div>
+            </div>
+            <div class="extras">
+                <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
+                <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+            </div>
+            <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
+        </form>
+        <div class="divider">or</div>
+        <div class="register-link">Don't have an account? <a href="register.html">Register Now</a></div>
+    </div>
+</div>
+<script>
+// Already logged in? Skip to dashboard
+if(localStorage.getItem('authToken')) window.location.replace('index.html');
+
+// Pre-fill if remembered
+if(localStorage.getItem('axio_remember')==='true')
+    document.getElementById('loginId').value = localStorage.getItem('axio_savedId')||'';
+
+function togglePw(id,btn){
+    const el=document.getElementById(id);
+    el.type = el.type==='password'?'text':'password';
+    btn.innerHTML = el.type==='password'?'&#128065;':'&#128064;';
+}
+function showErr(msg){
+    const e=document.getElementById('errMsg');
+    e.textContent=msg; e.style.display='block';
+    document.getElementById('okMsg').style.display='none';
+}
+function showOk(msg){
+    const e=document.getElementById('okMsg');
+    e.textContent=msg; e.style.display='block';
+    document.getElementById('errMsg').style.display='none';
+}
+
+function doLogin(e){
+    e.preventDefault();
+    const id = document.getElementById('loginId').value.trim();
+    const pw = document.getElementById('loginPw').value;
+    const remember = document.getElementById('rememberMe').checked;
+    const btn = document.getElementById('loginBtn');
+    if(!id||!pw){showErr('Please fill in both fields.');return;}
+
+    btn.disabled=true;
+    btn.innerHTML='<div class="loader"></div> Signing in...';
+
+    setTimeout(()=>{
+        const users = JSON.parse(localStorage.getItem('registeredUsers')||'[]');
+        const user = users.find(u=>(u.email===id||u.phone===id));
+
+        if(!user){
+            showErr('No account found. Please register first.');
+            btn.disabled=false; btn.innerHTML='Sign In'; return;
+        }
+        if(user.password!==pw){
+            showErr('Incorrect password. Please try again.');
+            btn.disabled=false; btn.innerHTML='Sign In'; return;
+        }
+        if(user.banned){
+            showErr('Your account has been suspended. Contact support.');
+            btn.disabled=false; btn.innerHTML='Sign In'; return;
+        }
+
+        // Save session
+        const token='axio_'+user.id+'_'+Date.now();
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', user.id);
+        localStorage.setItem('userName', user.fullName);
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userPhone', user.phone||'');
+        localStorage.setItem('userPassword', user.password);
+        localStorage.setItem('kycStatus', user.kycStatus||'none');
+
+        if(remember){
+            localStorage.setItem('axio_remember','true');
+            localStorage.setItem('axio_savedId', id);
+        } else {
+            localStorage.removeItem('axio_remember');
+            localStorage.removeItem('axio_savedId');
+        }
+
+        showOk('Login successful! Redirecting...');
+        setTimeout(()=>{
+            const redir = sessionStorage.getItem('axio_redirect')||'index.html';
+            sessionStorage.removeItem('axio_redirect');
+            window.location.replace(redir);
+        }, 900);
+    }, 1100);
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>

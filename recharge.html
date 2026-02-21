@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - Axio Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Montserrat',sans-serif;background:#f5f7fa;padding-bottom:20px}
+        .header{background:linear-gradient(135deg,#0A1628,#1a2942);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:15px}
+        .back-btn{background:none;border:none;color:#D4AF37;font-size:24px;text-decoration:none}
+        .header-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#D4AF37}
+        .container{max-width:600px;margin:0 auto;padding:20px}
+        .kyc-wall{background:#fff;border-radius:16px;padding:40px 24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .kyc-icon{font-size:64px;margin-bottom:16px}
+        .kyc-title{font-size:22px;font-weight:700;color:#0A1628;font-family:'Cormorant Garamond',serif;margin-bottom:10px}
+        .kyc-text{font-size:14px;color:#666;line-height:1.7;margin-bottom:24px}
+        .kyc-btn{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);color:#0A1628;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px}
+        .card{background:#fff;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+        .section-title{font-size:20px;font-weight:600;color:#0A1628;margin-bottom:18px;font-family:'Cormorant Garamond',serif}
+        .method-item{display:flex;align-items:center;justify-content:space-between;padding:16px;border:2px solid #f0f0f0;border-radius:12px;margin-bottom:12px;cursor:pointer;transition:all .3s;text-decoration:none;color:#333}
+        .method-item:hover,.method-item.selected{border-color:#D4AF37;background:rgba(212,175,55,.05)}
+        .method-left{display:flex;align-items:center;gap:14px}
+        .method-icon{width:48px;height:48px;background:rgba(212,175,55,.1);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px}
+        .method-title{font-size:15px;font-weight:600;color:#0A1628}
+        .method-sub{font-size:12px;color:#999;margin-top:2px}
+        .method-arrow{color:#D4AF37;font-size:20px}
+        .form-group{margin-bottom:16px}
+        label{display:block;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:600}
+        input,select,textarea{width:100%;padding:13px 16px;border:1.5px solid rgba(212,175,55,.3);border-radius:12px;font-size:14px;font-family:'Montserrat',sans-serif;color:#333;background:#fff}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+        textarea{resize:vertical;min-height:80px}
+        .upload-box{border:2px dashed #D4AF37;border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .3s}
+        .upload-box:hover{background:rgba(212,175,55,.05)}
+        .upload-icon{font-size:42px;margin-bottom:10px}
+        .upload-text{font-size:13px;color:#666}
+        .upload-preview{display:none;margin-top:10px;font-size:13px;color:#4cd964;font-weight:600}
+        .bank-details{background:rgba(212,175,55,.08);border-radius:12px;padding:18px;margin-bottom:16px}
+        .bank-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(212,175,55,.15);font-size:14px}
+        .bank-row:last-child{border-bottom:none}
+        .bank-label{color:#999}
+        .bank-value{font-weight:600;color:#0A1628}
+        .copy-btn{background:none;border:1px solid #D4AF37;color:#D4AF37;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer}
+        .info-box{background:rgba(212,175,55,.1);border-left:4px solid #D4AF37;padding:14px;border-radius:8px;font-size:13px;color:#0A1628;line-height:1.9;margin-bottom:16px}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#D4AF37,#F4E4A6);border:none;border-radius:12px;color:#0A1628;font-size:15px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .3s}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,175,55,.4)}
+        .step-badge{display:inline-block;background:#0A1628;color:#D4AF37;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:700;margin-right:8px}
+        #depositForm{display:none}
+    </style>
+</head>
+<body>
+<script>(function(){if(!localStorage.getItem('authToken')){sessionStorage.setItem('axio_redirect',location.pathname.split('/').pop()||'index.html');window.location.replace('login.html');}})()</script>
+
+<div class="header">
+    <a href="index.html" class="back-btn">&#8592;</a>
+    <div class="header-title">Deposit Funds</div>
+</div>
+<div class="container" id="pageContent">
+    <!-- Rendered by JS -->
+</div>
+<script>
+const kycStatus=localStorage.getItem('kycStatus')||'none'; // none | pending | approved
+const userName=localStorage.getItem('userName')||'Member';
+const el=document.getElementById('pageContent');
+
+if(kycStatus!=='approved'){
+    el.innerHTML=`
+    <div class="kyc-wall">
+        <div class="kyc-icon">&#128274;</div>
+        <div class="kyc-title">KYC Required to Deposit</div>
+        <div class="kyc-text">
+            To protect our users and comply with regulations, you must complete KYC (identity verification) before making a deposit.<br><br>
+            ${kycStatus==='pending'?'<strong style="color:#D4AF37">&#9203; Your KYC is under review. Please wait for admin approval.</strong>':'Complete KYC now — it only takes a few minutes.'}
+        </div>
+        ${kycStatus==='pending'?'<p style="font-size:13px;color:#999;margin-top:14px">You will be notified once your KYC is approved.</p>':`<a href="kyc.html" class="kyc-btn">&#128336; Complete KYC Now</a>`}
+    </div>`;
+} else {
+    renderDepositPage();
+}
+
+function renderDepositPage(){
+    el.innerHTML=`
+    <div class="card">
+        <h2 class="section-title">&#128236; Choose Payment Method</h2>
+        <div class="method-item" onclick="selectMethod('bankA')">
+            <div class="method-left">
+                <div class="method-icon">&#127984;</div>
+                <div><div class="method-title">Bank Transfer A</div><div class="method-sub">Transfer to our main account</div></div>
+            </div>
+            <span class="method-arrow">&#8594;</span>
+        </div>
+        <div class="method-item" onclick="selectMethod('bankB')">
+            <div class="method-left">
+                <div class="method-icon">&#128179;</div>
+                <div><div class="method-title">Bank Transfer B</div><div class="method-sub">Alternative bank account</div></div>
+            </div>
+            <span class="method-arrow">&#8594;</span>
+        </div>
+        <div class="method-item" onclick="selectMethod('usdt')">
+            <div class="method-left">
+                <div class="method-icon">&#8383;</div>
+                <div><div class="method-title">USDT (TRC20)</div><div class="method-sub">Cryptocurrency deposit</div></div>
+            </div>
+            <span class="method-arrow">&#8594;</span>
+        </div>
+    </div>
+    <div id="depositForm">
+        <div class="card" id="bankDetailsCard"></div>
+        <div class="card">
+            <h2 class="section-title">&#128338; Submit Proof of Payment</h2>
+            <div class="form-group">
+                <label>Deposit Amount (&#8358;)</label>
+                <input type="number" id="depAmount" placeholder="Enter the amount you deposited" min="7500" required>
+            </div>
+            <div class="form-group">
+                <label>Transaction Narration / Reference</label>
+                <textarea id="narration" placeholder="Enter the transaction narration or reference number as it appears on your bank statement or receipt. e.g. &quot;TRF/000123456/AXIO CAPITAL&quot;" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Upload Payment Proof (Screenshot / Receipt)</label>
+                <div class="upload-box" onclick="document.getElementById('proofFile').click()">
+                    <div class="upload-icon">&#128247;</div>
+                    <div class="upload-text">Tap to upload screenshot or photo of receipt</div>
+                    <div class="upload-preview" id="uploadPreview">&#10003; File selected</div>
+                    <input type="file" id="proofFile" style="display:none" accept="image/*,application/pdf" onchange="fileChosen(this)">
+                </div>
+            </div>
+            <div class="info-box">
+                &#9888; Your deposit will be credited to your wallet after <strong>admin verification</strong>.<br>
+                &#128204; Processing time: 5–30 minutes<br>
+                &#128204; Min deposit: &#8358;7,500<br>
+                &#128204; Include the correct narration to speed up verification
+            </div>
+            <button type="button" class="btn" onclick="submitDeposit()">&#128228; Submit Deposit Proof</button>
+        </div>
+    </div>`;
+}
+
+const BANK_DETAILS={
+    bankA:{name:'Axio Capital Ltd',bank:'First Bank of Nigeria',account:'3012345678',sort:'011'},
+    bankB:{name:'Axio Capital Ltd',bank:'Access Bank',account:'0123456789',sort:'044'},
+    usdt:{address:'TAxio1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabc',network:'TRC20'}
+};
+
+function selectMethod(m){
+    document.getElementById('depositForm').style.display='block';
+    const card=document.getElementById('bankDetailsCard');
+    if(m==='usdt'){
+        card.innerHTML=`
+        <h2 class="section-title">&#8383; USDT Wallet (TRC20)</h2>
+        <div class="bank-details">
+            <div class="bank-row"><span class="bank-label">Network</span><span class="bank-value">TRC20 (TRON)</span></div>
+            <div class="bank-row"><span class="bank-label">Wallet Address</span><span class="bank-value" style="font-size:12px;word-break:break-all">${BANK_DETAILS.usdt.address}</span></div>
+            <div style="text-align:center;margin-top:12px"><button class="copy-btn" onclick="copyText('${BANK_DETAILS.usdt.address}')">&#128203; Copy Address</button></div>
+        </div>
+        <p style="font-size:12px;color:#e74c3c;font-weight:600">&#9888; Only send via TRC20 network. Other networks will result in loss of funds.</p>`;
+    } else {
+        const d=BANK_DETAILS[m];
+        card.innerHTML=`
+        <h2 class="section-title">&#127984; Bank Transfer Details</h2>
+        <div class="bank-details">
+            <div class="bank-row"><span class="bank-label">Account Name</span><span class="bank-value">${d.name}</span></div>
+            <div class="bank-row"><span class="bank-label">Bank</span><span class="bank-value">${d.bank}</span></div>
+            <div class="bank-row"><span class="bank-label">Account Number</span><span class="bank-value">${d.account} <button class="copy-btn" onclick="copyText('${d.account}')">Copy</button></span></div>
+            <div class="bank-row"><span class="bank-label">Sort Code</span><span class="bank-value">${d.sort}</span></div>
+        </div>
+        <p style="font-size:12px;color:#666">Make the transfer then upload your proof of payment below.</p>`;
+    }
+    document.getElementById('depositForm').scrollIntoView({behavior:'smooth'});
+}
+
+function copyText(txt){
+    navigator.clipboard.writeText(txt).then(()=>alert('Copied: '+txt)).catch(()=>{
+        const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('Copied!');
+    });
+}
+function fileChosen(inp){
+    if(inp.files.length){document.getElementById('uploadPreview').style.display='block';}
+}
+function submitDeposit(){
+    const amount=document.getElementById('depAmount').value;
+    const narration=document.getElementById('narration').value;
+    const file=document.getElementById('proofFile').files[0];
+    if(!amount||amount<7500){alert('Minimum deposit is \u20A67,500');return;}
+    if(!narration.trim()){alert('Please enter the transaction narration/reference.');return;}
+    if(!file){alert('Please upload your payment proof.');return;}
+
+    // Save pending deposit for admin
+    const deps=JSON.parse(localStorage.getItem('pendingDeposits')||'[]');
+    deps.push({
+        id:'D'+Date.now(),
+        userId:localStorage.getItem('userId')||'user001',
+        userName:localStorage.getItem('userName')||'Member',
+        amount:parseFloat(amount),
+        narration,
+        fileName:file.name,
+        status:'pending',
+        date:new Date().toISOString()
+    });
+    localStorage.setItem('pendingDeposits',JSON.stringify(deps));
+
+    alert('\u2705 Deposit Proof Submitted!\n\nAmount: \u20A6'+parseFloat(amount).toLocaleString('en-NG')+'\nNarration: '+narration+'\n\nYour deposit will be credited after admin verification (5\u201330 minutes).');
+    setTimeout(()=>window.location.href='index.html',800);
+}
+</script>
+
+<!-- Telegram Chatbot FAB -->
+<style>
+.chat-fab{position:fixed;bottom:82px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#0088cc,#005f99);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,136,204,.45);cursor:pointer;z-index:9999;text-decoration:none;transition:all .3s}
+.chat-fab:hover{transform:scale(1.12);box-shadow:0 10px 30px rgba(0,136,204,.55)}
+.chat-fab svg{width:27px;height:27px;fill:#fff}
+.chat-pulse{position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#4cd964;border-radius:50%;border:2.5px solid #fff;animation:cpulse 2s infinite}
+@keyframes cpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+</style>
+<a class="chat-fab" href="https://t.me/AxioCapitalSupport" target="_blank" rel="noopener" aria-label="Chat Support on Telegram">
+    <div class="chat-pulse"></div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+    </svg>
+</a>
+
+</body>
+</html>
